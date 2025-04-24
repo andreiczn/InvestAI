@@ -1,0 +1,164 @@
+.crypto-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 120px;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+/* ✅ Stilizare Navbar */
+.navbar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    background-color: #1b263b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.navbar-logo img {
+    width: 150px;
+}
+
+.navbar-center {
+    font-size: 20px;
+    color: #a3cef1;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.navbar-links a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.navbar-links a.active {
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+}
+
+/* Selecția Crypto */
+.crypto-selector {
+    background: #1b263b;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    max-width: 500px;
+    width: 50%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Grafic */
+.chart-container {
+    width: 80%;
+    max-width: 1000px;
+    height: 600px;
+    background: #1b263b;
+    padding: 30px;
+    border-radius: 10px;
+    margin: 40px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.predict-button {
+    margin: 10px 0 30px;
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #2988ad;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .predict-button:hover {
+    background-color: #1a6d85;
+  }
+  
+  .predict-button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
+  
+  .news-container {
+    width: 80%;
+    max-width: 1000px;
+    background: #1b263b;
+    padding: 30px;
+    margin: 30px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .news-container h2 {
+    color: #a3cef1;
+    margin-bottom: 20px;
+  }
+  
+  .news-list {
+    list-style: none;
+  }
+  
+  .news-item {
+    margin-bottom: 20px;
+    animation: fadeIn 0.6s ease forwards;
+    opacity: 0;
+  }
+  
+  .news-item:nth-child(1) { animation-delay: 0.1s; }
+  .news-item:nth-child(2) { animation-delay: 0.2s; }
+  .news-item:nth-child(3) { animation-delay: 0.3s; }
+  .news-item:nth-child(4) { animation-delay: 0.4s; }
+  
+  .news-item a {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+  }
+  
+  .news-item a:hover {
+    text-decoration: underline;
+  }
+  
+  .news-meta {
+    font-size: 14px;
+    color: #aaa;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
