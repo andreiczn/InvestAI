@@ -9,7 +9,7 @@ import yfinance as yf
 from pydantic import BaseModel
 from sklearn.preprocessing import MinMaxScaler
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from typing import List
+from typing import List, Any, Union
 
 # Configure logger
 logger = logging.getLogger("uvicorn.error")
@@ -37,6 +37,17 @@ async def add_cors_headers(request: Request, call_next):
     response.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "*"
     return response
+
+# Utility function to force dict keys to strings
+JSONType = Union[dict, list, str, int, float, bool, None]
+
+def ensure_str_keys(obj: Any) -> JSONType:
+    if isinstance(obj, dict):
+        return {str(k): ensure_str_keys(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [ensure_str_keys(v) for v in obj]
+    else:
+        return obj
 
 # Load the trained model
 model = tf.keras.models.load_model("lstm_model.h5")
@@ -75,7 +86,7 @@ def predict_stock(request: StockRequest):
         ticker = CRYPTO_MAPPING.get(request.ticker.lower(), request.ticker.upper())
         df = yf.download(ticker, period="3y", interval="1d")
         if df.empty:
-            return JSONResponse(status_code=404, content={"error": f"No data found for {request.ticker}"})
+            return JSONResponse(status_code=404, content={"error": f"No data for {request.ticker}"})
 
         # Prepare data for LSTM
         df = df[["Open", "High", "Low", "Close"]].dropna()
@@ -87,14 +98,14 @@ def predict_stock(request: StockRequest):
         # Ensure enough data
         seq_length = 60
         if scaled_data.shape[0] < seq_length:
-            return JSONResponse(status_code=400, content={"error": "Insufficient data for prediction."})
+            return JSONResponse(status_code=400, content={"error": "Not enough data"})
 
         # Generate predictions
         X_input = scaled_data[-seq_length:].reshape(1, seq_length, 1)
         future_preds = []
         for _ in range(request.days):
             nxt = model.predict(X_input, verbose=0)[0, 0]
-            future_preds.append(nxt)
+            future_preds.append(float(nxt))
             X_input = np.append(
                 X_input[:, 1:, :],
                 np.array(nxt).reshape(1, 1, 1),
@@ -116,10 +127,10 @@ def predict_stock(request: StockRequest):
             "predictions": predictions_list,
             "ohlc": ohlc_json
         }
-
-        # Serialize to JSON string manually to avoid tuple-key errors
-        body = json.dumps(response_content, default=str)
-        return Response(content=body, media_type="application/json")
+        # Ensure all keys are strings
+        safe = ensure_str_keys(response_content)
+        # Return as valid JSON
+        return JSONResponse(content=safe)
 
     except Exception as e:
         logger.exception("❌ Eroare la predict_stock")
@@ -136,7 +147,7 @@ def analyze_sentiment(request: NewsSentimentRequest):
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 # Compute volatility
-def compute_volatility(prices):
+def compute_volatility(prices: list) -> float:
     arr = np.asarray(prices).flatten()
     if arr.size < 2:
         return 0.0
