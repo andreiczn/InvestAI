@@ -129,7 +129,7 @@ const StockMarketPage = () => {
     setShowPrediction(false); 
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/predict/", {
+      const response = await fetch("/predict/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -264,7 +264,7 @@ const StockMarketPage = () => {
         )}
       </div>
 
-      {/* Afișare grafic doar după generarea predicției */}
+      {/* afisare grafic dupa predictie */}
       {showPrediction && predictionChartData && (
         <div className="chart-container">
           <Chart type="line" data={predictionChartData} options={chartOptions} />
