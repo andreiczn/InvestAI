@@ -226,3 +226,39 @@ body {
 .news-item:nth-child(3) { animation-delay: 0.3s; }
 .news-item:nth-child(4) { animation-delay: 0.4s; }
 .news-item:nth-child(5) { animation-delay: 0.5s; }
+
+
+.risk-verdict-container {
+  background: #1a1a2e;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-top: 2rem;
+  border: 2px solid #00bfff;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.explanation-toggle {
+  margin-top: 1rem;
+  background: transparent;
+  border: none;
+  color: #00bfff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.explanation-content {
+  overflow: hidden;
+  padding-top: 0.5rem;
+}
+
+.explanation-content ul {
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.verdict-lowrisk      { color: limegreen; }
+.verdict-moderaterisk { color: orange; }
+.verdict-highrisk     { color: red; }
+

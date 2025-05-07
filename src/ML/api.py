@@ -10,6 +10,8 @@ from pydantic import BaseModel
 from sklearn.preprocessing import MinMaxScaler
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from typing import List, Any, Union
+from curl_cffi import requests as curl_requests
+yf.shared._requests = curl_requests
 
 # Configure logger
 logger = logging.getLogger("uvicorn.error")
