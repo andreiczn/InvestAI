@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # exclude virtual environments
-src/ML/.venv/
+**/.venv/
