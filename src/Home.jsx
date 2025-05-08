@@ -65,6 +65,9 @@ const Home = () => {
           >
             Crypto
           </Link>
+          <Link to="/chat" className={location.pathname === "/chat" ? "active" : ""}>
+                      Messages
+                    </Link>
         </div>
       </nav>
 

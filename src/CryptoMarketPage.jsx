@@ -151,6 +151,9 @@ const CryptoMarketPage = () => {
           <Link to="/"  className={location.pathname==="/" ? "active":""}>Home</Link>
           <Link to="/stocks"  className={location.pathname==="/stocks"?"active":""}>Stocks</Link>
           <Link to="/crypto"  className={location.pathname==="/crypto"?"active":""}>Crypto</Link>
+          <Link to="/chat" className={location.pathname === "/chat" ? "active" : ""}>
+                      Messages
+                    </Link>
         </div>
       </nav>
 

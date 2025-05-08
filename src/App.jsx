@@ -5,6 +5,7 @@ import Home from "./Home";
 import Auth from "./Auth";
 import StockMarketPage from "./StockMarketPage";
 import CryptoMarketPage from "./CryptoMarketPage";
+import ChatPage from "./ChatPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -30,6 +31,8 @@ function App() {
         <Route path="/stocks" element={<StockMarketPage />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/crypto" element={<CryptoMarketPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        
 
       </Routes>
     </Router>
