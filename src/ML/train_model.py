@@ -11,7 +11,7 @@ ticker = 'AAPL'
 df = get_stock_data(ticker)
 X, y, scaler = preprocess_data(df)
 
-# 2. Împărțim datele în seturi de antrenare și test
+# 2. Împărțim datele în seturi de antrenare și test 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
 # 3. Construim modelul cu Bidirectional LSTM

@@ -195,69 +195,84 @@ const CryptoMarketPage = () => {
         </div>
       )}
 
-      {/* risk verdict + animated explanation */}
-      {loadingRisk ? (
-        <p style={{ color: "white", textAlign: "center" }}>🔄 Analyzing risk...</p>
-      ) : (
-        <AnimatePresence>
-          {riskData && (
+      {/* Risk Verdict + animated explanation */}
+{loadingRisk ? (
+  <p style={{ color: "white", textAlign: "center" }}>
+    🔄 Analyzing risk...
+  </p>
+) : (
+  <AnimatePresence>
+    {riskData && (
+      <motion.div
+        className="risk-verdict-container"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h3>📊 AI Risk Verdict</h3>
+        <p>
+          <strong>Risk Score:</strong> {riskData.risk_score}/100
+        </p>
+        <p>
+          <strong>Verdict:</strong>{" "}
+          <span className={`verdict-${riskData.verdict.replace(" ", "").toLowerCase()}`}>
+            {riskData.verdict}
+          </span>
+        </p>
+
+        {/* Toggle button for details */}
+        <button
+          className="explanation-toggle"
+          onClick={() => setExplanationOpen(!explanationOpen)}
+        >
+          {explanationOpen ? "▼ Hide details" : "❓ How is this calculated?"}
+        </button>
+
+        <AnimatePresence initial={false}>
+          {explanationOpen && (
             <motion.div
-              className="risk-verdict-container"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.5 }}
+              className="explanation-content"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
-              <h3>📊 AI Risk Verdict</h3>
-              <p><strong>Risk Score:</strong> {riskData.risk_score}/100</p>
+              <ul>
+                <li>
+                  <strong>Sentiment Score (S<sub>s</sub>)</strong> = max(−average_sentiment, 0)  
+                  <em> (captures only negative tone; 0 if news is neutral/positive)</em>
+                </li>
+                <li>
+                  <strong>Volatility Score (S<sub>v</sub>)</strong> = min(σ(daily returns) / 0.05, 1.0)  
+                  <em> (5% volatility → 1.0; below 5% scales proportionally)</em>
+                </li>
+                <li>
+                  <strong>Trend Score (S<sub>t</sub>)</strong> = “maximum drop from any predicted price”  
+                  <br />
+                  &nbsp;&nbsp;&nbsp;1. p<sub>min</sub> = the lowest predicted price in the entire AI forecast array  
+                  <br />
+                  &nbsp;&nbsp;&nbsp;2. Δ = (p<sub>min</sub> − last_real) / last_real  
+                  <br />
+                  &nbsp;&nbsp;&nbsp;3. S<sub>t</sub> = min(|Δ|, 1.0) if Δ &lt; 0, otherwise 0  
+                  <em> (measures how far the lowest prediction dips below the current price)</em>
+                </li>
+              </ul>
               <p>
-                <strong>Verdict:</strong>{" "}
-                <span className={`verdict-${riskData.verdict.replace(" ","").toLowerCase()}`}>
-                  {riskData.verdict}
-                </span>
+                <strong>Final formula:</strong><br />
+                <code>
+                  raw_risk = 1 − (1 − S<sub>s</sub>) × (1 − S<sub>t</sub>) × (1 − S<sub>v</sub>)<br />
+                  risk_score = round(raw_risk × 100, 2)
+                </code>
               </p>
-              <button
-                className="explanation-toggle"
-                onClick={()=>setExplanationOpen(o=>!o)}
-              >
-                {explanationOpen ? "▼ Hide details" : "❓ How is this calculated?"}
-              </button>
-              <AnimatePresence initial={false}>
-                {explanationOpen && (
-                  <motion.div
-                    className="explanation-content"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ul>
-                      <li>
-                        <strong>Sentiment Score</strong> = normalize(average_sentiment) = (sentiment + 1) / 2  
-                        <em> (how positive/negative the news tone is)</em>
-                      </li>
-                      <li>
-                        <strong>Volatility Score</strong> = σ(daily returns)  
-                        <em> (how “jumpy” the price has been)</em>
-                      </li>
-                      <li>
-                        <strong>Model Confidence</strong> = fixed coefficient (0.8)  
-                        <em> (our LSTM model’s confidence)</em>
-                      </li>
-                    </ul>
-                    <p>
-                      Final formula:<br/>
-                      <code>
-                        risk_score = 100 × [0.4×(1−SentimentScore) + 0.4×VolatilityScore + 0.2×(1−ModelConfidence)]
-                      </code>
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           )}
         </AnimatePresence>
-      )}
+      </motion.div>
+    )}
+  </AnimatePresence>
+)}
+
 
       {/* news section */}
       <div className="news-container">
