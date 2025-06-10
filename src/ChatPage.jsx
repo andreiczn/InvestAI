@@ -15,11 +15,24 @@ import { db } from "./firebaseConfig";
 import "./styling/ChatPage.css";
 import logo from "./assets/investAI.png";
 import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { logout } from "./authService";
+
+
 
 const Navbar = () => {
   const location = useLocation();
   const auth = getAuth();
   const [userEmail, setUserEmail] = useState("");
+  const navigate = useNavigate();
+  const handleSignOut = async () => {
+      try {
+        await logout();                        // 1) firebase signOut
+        navigate("/auth", { replace: true }); // 2) redirect la login
+      } catch (err) {
+        console.error("Logout error:", err);
+      }
+    };
 
   useEffect(() => {
     const u = auth.currentUser;
@@ -56,6 +69,12 @@ const Navbar = () => {
         >
           Messages
         </Link>
+        <button
+            onClick={handleSignOut}
+            className="navbar-link-button"
+          >
+            Sign Out
+          </button>
       </div>
     </nav>
   );

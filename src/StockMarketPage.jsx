@@ -19,6 +19,8 @@ import { CandlestickController, CandlestickElement } from "chartjs-chart-financi
 import { getStockNews, analyzeNewsSentiment } from "./newsService"; 
 import { getRiskScore } from "./newsService";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { logout } from "./authService";
 
 
 ChartJS.register(
@@ -52,9 +54,17 @@ const StockMarketPage = () => {
   const [riskData, setRiskData] = useState(null);
   const [loadingRisk, setLoadingRisk] = useState(false);
   const [explanationOpen, setExplanationOpen] = useState(false);
+  const navigate = useNavigate();
 
 
-
+  const handleSignOut = async () => {
+    try {
+      await logout();                        // 1) firebase signOut
+      navigate("/auth", { replace: true }); // 2) redirect la login
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  };
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -222,6 +232,12 @@ const StockMarketPage = () => {
           <Link to="/chat" className={location.pathname === "/chat" ? "active" : ""}>
             Messages
           </Link>
+          <button
+            onClick={handleSignOut}
+            className="navbar-link-button"
+          >
+            Sign Out
+          </button>
         </div>
       </nav>
 

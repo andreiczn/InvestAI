@@ -4,6 +4,7 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
+    signOut,
   } from "firebase/auth";
   import app from "./firebaseConfig";
   
@@ -37,3 +38,11 @@ import {
     }
   };
   
+  export const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Logout error:", error);
+      throw error;
+    }
+  };

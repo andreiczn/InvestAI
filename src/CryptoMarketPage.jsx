@@ -19,6 +19,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import logo from "./assets/investAI.png";
 import "./styling/CryptoMarketPage.css";
 
+import { useNavigate } from "react-router-dom";
+import { logout } from "./authService";
+
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -46,6 +50,8 @@ const CryptoMarketPage = () => {
   const [explanationOpen, setExplanationOpen] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
+  
 
   // get user email
   useEffect(() => {
@@ -53,7 +59,14 @@ const CryptoMarketPage = () => {
     const user = auth.currentUser;
     if (user) setUserEmail(user.email);
   }, []);
-
+  const handleSignOut = async () => {
+      try {
+        await logout();                        // 1) firebase signOut
+        navigate("/auth", { replace: true }); // 2) redirect la login
+      } catch (err) {
+        console.error("Logout error:", err);
+      }
+    };
   // fetch historical OHLC
   const fetchCryptoData = async (symbol) => {
     setLoading(true);
@@ -154,6 +167,12 @@ const CryptoMarketPage = () => {
           <Link to="/chat" className={location.pathname === "/chat" ? "active" : ""}>
                       Messages
                     </Link>
+          <button
+            onClick={handleSignOut}
+            className="navbar-link-button"
+          >
+            Sign Out
+          </button>
         </div>
       </nav>
 
