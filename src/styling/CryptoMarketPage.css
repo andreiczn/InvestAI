@@ -8,7 +8,6 @@
     min-height: 100vh;
 }
 
-/* ✅ Stilizare Navbar */
 .navbar {
     position: fixed;
     top: 20px;
@@ -59,7 +58,6 @@
     font-weight: bold;
 }
 
-/* Selecția Crypto */
 .crypto-selector {
     background: #1b263b;
     border-radius: 10px;
@@ -71,7 +69,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Grafic */
 .chart-container {
     width: 80%;
     max-width: 1000px;
@@ -162,7 +159,6 @@
     }
   }
   
-/* risk verdict + explanation */
 .risk-verdict-container {
   background: #1a1a2e;
   padding: 1.5rem;

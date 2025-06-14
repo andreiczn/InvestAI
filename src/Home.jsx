@@ -14,8 +14,8 @@ const Home = () => {
   const navigate = useNavigate();
   const handleSignOut = async () => {
         try {
-          await logout();                        // 1) firebase signOut
-          navigate("/auth", { replace: true }); // 2) redirect la login
+          await logout();                        
+          navigate("/auth", { replace: true }); 
         } catch (err) {
           console.error("Logout error:", err);
         }
@@ -29,7 +29,7 @@ const Home = () => {
     }
   }, []);
 
-  // Folosim Intersection Observer pentru a anima secțiunile hero la scroll
+  
   useEffect(() => {
     const heroSections = document.querySelectorAll(".hero-section");
     const observer = new IntersectionObserver(
@@ -52,7 +52,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Navbar */}
       <nav className="navbar">
         <div className="navbar-logo">
           <img src={logo} alt="InvestAI Logo" />
@@ -88,7 +87,7 @@ const Home = () => {
         </div>
       </nav>
 
-      {/* Hero Banner pentru Stocks */}
+      
       <section
         className="hero-section"
         style={{ backgroundImage: `url(${stocksBanner})` }}
@@ -102,7 +101,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Hero Banner pentru Crypto */}
+
       <section
         className="hero-section"
         style={{ backgroundImage: `url(${cryptoBanner})` }}

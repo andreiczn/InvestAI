@@ -111,7 +111,7 @@ def predict_stock(request: StockRequest):
         safe = ensure_str_keys(response_content)
         return JSONResponse(content=safe)
     except Exception as e:
-        logger.exception("❌ Eroare la predict_stock")
+        logger.exception("❌ predict_stock error")
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 @app.post("/analyze-sentiment/")
@@ -137,7 +137,7 @@ def compute_sentiment_risk(average_sentiment: float) -> float:
 def compute_trend_risk(predictions: list, last_real: float) -> float:
     if len(predictions) == 0 or last_real == 0:
         return 0.0
-    # găsim cel mai jos punct din toate predicțiile
+    # finding the lowest point 
     p_min = float(min(predictions))
     drop_pct = (p_min - last_real) / last_real
     return min(abs(drop_pct), 1.0) if drop_pct < 0 else 0.0
@@ -150,22 +150,22 @@ def calculate_risk_score(
     predicted_prices: list,
     recent_real_prices: list
 ) -> float:
-    # 1) Sub-scorul de sentiment
+    
     s_s = compute_sentiment_risk(average_sentiment)
-    # 2) Sub-scorul de volatilitate
+    
     v = compute_volatility(recent_real_prices)
     s_v = normalize_volatility(v)
-    # 3) Ultimul preț real (cu verificarea lungimii array-ului)
+    
     if recent_real_prices is not None and len(recent_real_prices) > 0:
         last_real = float(recent_real_prices[-1])
     else:
         last_real = 0.0
-    # 4) Sub-scorul de trend: folosim cel mai mare drop din predicții
+    
     s_t = compute_trend_risk(predicted_prices, last_real)
 
-    # 5) Formula „1 - (1-S_s)(1-S_t)(1-S_v)”
+    
     raw = 1.0 - (1.0 - s_s) * (1.0 - s_t) * (1.0 - s_v)
-    # 6) Scalează la [0..100]
+    
     return round(float(raw) * 100.0, 2)
 
 @app.post("/risk-score/")
@@ -177,7 +177,7 @@ def get_risk_score(request: RiskScoreRequest):
         if df.empty:
             return JSONResponse(status_code=404, content={"error": f"No data found for {ticker}"})
         close_prices = df["Close"].values
-        # luăm ultimele 59 de prețuri reale
+       
         recent_real = close_prices[-59:]
         scaler = MinMaxScaler(feature_range=(0, 1))
         scaled = scaler.fit_transform(close_prices.reshape(-1, 1))

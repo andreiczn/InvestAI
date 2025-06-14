@@ -6,7 +6,7 @@ export const getStockNews = async (symbol = "AAPL") => {
   try {
     const response = await fetch(`${BASE_URL}?api_token=${MARKETAUX_API_KEY}&symbols=${symbol}&filter_entities=true&language=en`);
     const data = await response.json();
-    return data.data; // lista de articole
+    return data.data; 
   } catch (error) {
     console.error("Error fetching stock news:", error);
     return [];
@@ -18,8 +18,8 @@ export const getCryptoNews = async () => {
       `${BASE_URL}?api_token=${MARKETAUX_API_KEY}&filter_entities=true&language=en&q=crypto`
     );
     const data = await response.json();
-    console.log("Crypto news API response:", data); // ✅ debug in consola
-    return data.data ?? []; // ✅ fallback in caz ca lipseste
+    console.log("Crypto news API response:", data); 
+    return data.data ?? []; 
   } catch (error) {
     console.error("Error fetching crypto news:", error);
     return [];
@@ -28,8 +28,8 @@ export const getCryptoNews = async () => {
 export const analyzeNewsSentiment = async (articles) => {
   try {
     const texts = articles
-      .map(article => article.description || article.title || "") // sau .content dacă există
-      .filter(text => text.length > 10); // evităm texte goale
+      .map(article => article.description || article.title || "") 
+      .filter(text => text.length > 10); 
 
     const response = await fetch("http://localhost:8000/analyze-sentiment/", {
       method: "POST",

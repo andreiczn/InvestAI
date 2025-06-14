@@ -49,7 +49,7 @@ const StockMarketPage = () => {
   const [chartKey, setChartKey] = useState(0);
   const [prediction, setPrediction] = useState(null);
   const [loadingPrediction, setLoadingPrediction] = useState(false);
-  const [showPrediction, setShowPrediction] = useState(false); // Control vizibilitate grafic predicție
+  const [showPrediction, setShowPrediction] = useState(false); 
   const [stockNews, setStockNews] = useState([]);
   const [riskData, setRiskData] = useState(null);
   const [loadingRisk, setLoadingRisk] = useState(false);
@@ -59,8 +59,8 @@ const StockMarketPage = () => {
 
   const handleSignOut = async () => {
     try {
-      await logout();                        // 1) firebase signOut
-      navigate("/auth", { replace: true }); // 2) redirect la login
+      await logout();                        
+      navigate("/auth", { replace: true }); 
     } catch (err) {
       console.error("Logout error:", err);
     }
@@ -241,7 +241,7 @@ const StockMarketPage = () => {
         </div>
       </nav>
 
-      {/* Selecție Stock */}
+
       <div className="stock-selector">
         <label>Select a Stock:</label>
         <select value={stockSymbol} onChange={(e) => setStockSymbol(e.target.value)}>
@@ -259,7 +259,7 @@ const StockMarketPage = () => {
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-      {/* Grafic Candlestick pentru date istorice */}
+
       <div className="chart-container">
         {loading ? (
           <p>Loading...</p>
@@ -284,8 +284,6 @@ const StockMarketPage = () => {
         )}
       </div>
 
-      {/* afisare grafic dupa predictie */}
-      {/* display prediction chart */}
       {showPrediction && predictionChartData && (
         <div className="chart-container">
           <Chart type="line" data={predictionChartData} options={chartOptions} />
@@ -294,84 +292,86 @@ const StockMarketPage = () => {
 
       
 
-      {/* risk verdict + animated explanation */}
-      {loadingRisk ? (
-        <p style={{ color: "white", textAlign: "center" }}>
-          🔄 Analyzing risk...
-        </p>
-      ) : (
-        <AnimatePresence>
-          {riskData && (
-            <motion.div
-              className="risk-verdict-container"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h3 style={{ marginBottom: "0.5rem" }}>📊 AI Risk Verdict</h3>
-              <p>
-                <strong>Risk Score:</strong> {riskData.risk_score}/100
-              </p>
-              <p>
-                <strong>Verdict:</strong>{" "}
-                <span
-                  className={`verdict-${riskData.verdict
-                    .replace(" ", "")
-                    .toLowerCase()}`}
-                >
-                  {riskData.verdict}
-                </span>
-              </p>
-
-              {/* custom dropdown toggle */}
-              <button
-                className="explanation-toggle"
-                onClick={() => setExplanationOpen(!explanationOpen)}
-              >
-                {explanationOpen ? "▼ Hide details" : "❓ How is this calculated?"}
-              </button>
-
-              <AnimatePresence initial={false}>
-                {explanationOpen && (
-                  <motion.div
-                    className="explanation-content"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ul>
-                      <li>
-                        <strong>Sentiment Score</strong> = normalize(average_sentiment) = (sentiment + 1) / 2  
-                        <em> (measures how positive/negative the news tone is)</em>
-                      </li>
-                      <li>
-                        <strong>Volatility Score</strong> = σ(daily returns)  
-                        <em> (shows how “jumpy” the price has been)</em>
-                      </li>
-                      <li>
-                        <strong>Model Confidence</strong> = fixed coefficient (currently 0.8)  
-                        <em> (how confident our LSTM model is)</em>
-                      </li>
-                    </ul>
-                    <p>
-                      Final formula:<br />
-                      <code>
-                        risk_score = 100 × [ 0.4×(1−SentimentScore) + 0.4×VolatilityScore + 0.2×(1−ModelConfidence) ]
-                      </code>
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      )}
+     {loadingRisk ? (
+       <p style={{ color: "white", textAlign: "center" }}>
+         🔄 Analyzing risk...
+       </p>
+     ) : (
+       <AnimatePresence>
+         {riskData && (
+           <motion.div
+             className="risk-verdict-container"
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             exit={{ opacity: 0, y: 20 }}
+             transition={{ duration: 0.5 }}
+           >
+             <h3>📊 AI Risk Verdict</h3>
+             <p>
+               <strong>Risk Score:</strong> {riskData.risk_score}/100
+             </p>
+             <p>
+               <strong>Verdict:</strong>{" "}
+               <span className={`verdict-${riskData.verdict.replace(" ", "").toLowerCase()}`}>
+                 {riskData.verdict}
+               </span>
+             </p>
+     
+             
+             <button
+               className="explanation-toggle"
+               onClick={() => setExplanationOpen(!explanationOpen)}
+             >
+               {explanationOpen ? "▼ Hide details" : "❓ How is this calculated?"}
+             </button>
+     
+             <AnimatePresence initial={false}>
+               {explanationOpen && (
+                 <motion.div
+                   className="explanation-content"
+                   initial={{ height: 0, opacity: 0 }}
+                   animate={{ height: "auto", opacity: 1 }}
+                   exit={{ height: 0, opacity: 0 }}
+                   transition={{ duration: 0.3 }}
+                 >
+                   <ul>
+                     <li>
+                       <strong>Sentiment Score (S<sub>s</sub>)</strong> = max(−average_sentiment, 0)  
+                       <em> (captures only negative tone; 0 if news is neutral/positive)</em>
+                     </li>
+                     <li>
+                       <strong>Volatility Score (S<sub>v</sub>)</strong> = min(σ(daily returns) / 0.05, 1.0)  
+                       <em> (5% volatility → 1.0; below 5% scales proportionally)</em>
+                     </li>
+                     <li>
+                       <strong>Trend Score (S<sub>t</sub>)</strong> = “maximum drop from any predicted price”  
+                       <br />
+                       &nbsp;&nbsp;&nbsp;1. p<sub>min</sub> = the lowest predicted price in the entire AI forecast array  
+                       <br />
+                       &nbsp;&nbsp;&nbsp;2. Δ = (p<sub>min</sub> − last_real) / last_real  
+                       <br />
+                       &nbsp;&nbsp;&nbsp;3. S<sub>t</sub> = min(|Δ|, 1.0) if Δ &lt; 0, otherwise 0  
+                       <em> (measures how far the lowest prediction dips below the current price)</em>
+                     </li>
+                   </ul>
+                   <p>
+                     <strong>Final formula:</strong><br />
+                     <code>
+                       raw_risk = 1 − (1 − S<sub>s</sub>) × (1 − S<sub>t</sub>) × (1 − S<sub>v</sub>)<br />
+                       risk_score = round(raw_risk × 100, 2)
+                     </code>
+                   </p>
+                 </motion.div>
+               )}
+             </AnimatePresence>
+           </motion.div>
+         )}
+       </AnimatePresence>
+     )}
 
 
       
-      {/* Secțiune știri */}
+    
       <div className="news-container">
         <h2>Latest News for {stockSymbol}</h2>
         {stockNews.length === 0 ? (

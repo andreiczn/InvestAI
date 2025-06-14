@@ -27,8 +27,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const handleSignOut = async () => {
       try {
-        await logout();                        // 1) firebase signOut
-        navigate("/auth", { replace: true }); // 2) redirect la login
+        await logout();                        
+        navigate("/auth", { replace: true }); 
       } catch (err) {
         console.error("Logout error:", err);
       }

@@ -1,10 +1,10 @@
-/* Auth.css */
+
 .auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Se întinde pe întreaga înălțime */
-    width: 100vw; /* Fundal pe întreaga lățime */
+    height: 100vh; 
+    width: 100vw; 
     background-color: #0d1b2a;
     color: #ffffff;
     font-family: "Arial", sans-serif;
@@ -31,7 +31,6 @@
     color: #e0e1dd;
 }
 
-/* Aliniere perfectă pentru input-uri și butoane */
 .auth-input,
 .auth-button {
     width: 100%;
@@ -40,7 +39,7 @@
     border: none;
     border-radius: 6px;
     font-size: 16px;
-    box-sizing: border-box; /* Previne diferențele de dimensiune */
+    box-sizing: border-box; 
     text-align: center;
 }
 
@@ -49,7 +48,7 @@
     color: #ffffff;
 }
 
-/* Stilizare buton normal */
+
 .auth-button {
     background-color: #2988ad;
     color: white;
@@ -61,19 +60,19 @@
     background-color: #a3cef1;
 }
 
-/* Stilizare buton Google */
+
 .auth-google {
     background-color: white;
     color: black;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Spațiere între logo și text */
+    gap: 10px; 
     font-weight: bold;
     border: 1px solid #ccc;
 }
 
-/* Logo-ul Google în buton */
+
 .auth-google img {
     width: 20px;
     height: 20px;

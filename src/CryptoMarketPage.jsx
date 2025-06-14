@@ -61,13 +61,13 @@ const CryptoMarketPage = () => {
   }, []);
   const handleSignOut = async () => {
       try {
-        await logout();                        // 1) firebase signOut
-        navigate("/auth", { replace: true }); // 2) redirect la login
+        await logout();                        
+        navigate("/auth", { replace: true }); 
       } catch (err) {
         console.error("Logout error:", err);
       }
     };
-  // fetch historical OHLC
+
   const fetchCryptoData = async (symbol) => {
     setLoading(true);
     setErrorMessage("");
@@ -214,7 +214,7 @@ const CryptoMarketPage = () => {
         </div>
       )}
 
-      {/* Risk Verdict + animated explanation */}
+      
 {loadingRisk ? (
   <p style={{ color: "white", textAlign: "center" }}>
     🔄 Analyzing risk...
@@ -240,7 +240,7 @@ const CryptoMarketPage = () => {
           </span>
         </p>
 
-        {/* Toggle button for details */}
+        
         <button
           className="explanation-toggle"
           onClick={() => setExplanationOpen(!explanationOpen)}

@@ -9,7 +9,7 @@ import yfinance as yf
 ticker = "GOOGL"
 df = yf.download(ticker, period="6mo", interval="1d")  
 
-print("Ultimele date disponibile:")
+print("Latest available data:")
 print(df.tail())  
 
 
@@ -30,7 +30,7 @@ seq_length = 60
 X, y = create_sequences(scaled_data, seq_length)
 
 
-print(f"Forma setului de date preprocesat: {X.shape}, {y.shape}")
+print(f"Preprocessed dataset shape: {X.shape}, {y.shape}")
 
 
 model = tf.keras.models.load_model("lstm_model.h5")
@@ -50,7 +50,7 @@ plt.legend()
 plt.grid()
 plt.show()
 
-print("Predicțiile pentru setul istoric au fost generate și vizualizate!")
+print("Historical predictions generated!")
 
 
 future_predictions = []
@@ -78,4 +78,4 @@ plt.legend()
 plt.grid()
 plt.show()
 
-print("Predicțiile pentru următoarele luni au fost generate și vizualizate!")
+print("Future predictions for the next 90 days generated!")
