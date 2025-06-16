@@ -21,7 +21,7 @@ import "./styling/CryptoMarketPage.css";
 
 import { useNavigate } from "react-router-dom";
 import { logout } from "./authService";
-
+const CG_KEY = import.meta.env.VITE_COINGECKO_KEY;
 
 ChartJS.register(
   CategoryScale,
@@ -73,7 +73,7 @@ const CryptoMarketPage = () => {
     setErrorMessage("");
     try {
       const resp = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${symbol}/market_chart?vs_currency=usd&days=90&interval=daily&x_cg_demo_api_key=CG-oYY9gdkcX6pr94DMeqcXzKmv`
+        `https://api.coingecko.com/api/v3/coins/${symbol}/market_chart?vs_currency=usd&days=90&interval=daily&x_cg_demo_api_key=${CG_KEY}`
       );
       const prices = resp.data.prices || [];
       if (!prices.length) {

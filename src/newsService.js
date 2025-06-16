@@ -1,5 +1,5 @@
 
-const MARKETAUX_API_KEY = "pdxbTPZhJkghV1w4UoupKwVYYd0xoW9I9rlj42PG";
+const MARKETAUX_API_KEY = import.meta.env.VITE_MARKETAUX_KEY;
 const BASE_URL = "https://api.marketaux.com/v1/news/all";
 
 export const getStockNews = async (symbol = "AAPL") => {

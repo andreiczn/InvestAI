@@ -1,255 +1,293 @@
+/* ChatPage.css */
 
+/* ===== Global ===== */
 :root {
-    --bg-dark: #16213e;
-    --bg-sidebar: #1b263b;
-    --bg-header: #1b263b;
-    --accent: #00bfa5;
-    --text-light: #e3e6f3;
-    --text-muted: #ccc;
-    --border-color: #415a77;
-    --radius: 8px;
-  }
-  
-  body {
-    background: var(--bg-dark);
-    color: var(--text-light);
-    font-family: 'Inter', sans-serif;
-  }
-  
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 1200px;
-    background-color: var(--bg-header);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    border-radius: var(--radius);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    z-index: 1000;
-  }
-  
-  .chat-page {
-    margin: 80px 0 0 !important;     
-    display: flex !important;
-    justify-content: center !important;
-  }
-  
+  --bg-page: #0d1b2a;
+  --bg-wrapper: #1b263b;
+  --bg-sidebar: #1a2738;
+  --bg-chat: #152238;
+  --color-text: #e0e1dd;
+  --color-muted: #aaa;
+  --accent: #2988ad;
+  --accent-light: #517995;
+  --accent-dark: #1a6d85;
+  --radius: 12px;
+  --transition: 0.3s ease;
+}
 
-  .chat-wrapper {
-    width: 90%;
-    max-width: 1200px;
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    height: calc(100vh - 100px);
-    background: var(--bg-dark);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    margin: 0 auto;
+/* ===== Pagina și navbar ===== */
+.chat-page {
+  background-color: var(--bg-page);
+  min-height: 100vh;
+  padding-top: 130px; /* spațiu sub navbar */
+  font-family: Arial, sans-serif;
+  color: var(--color-text);
+  overflow: hidden;
+}
+
+/* ===== Wrapper ===== */
+.chat-wrapper {
+  /* FIXĂ DIMENSIUNILE pentru a evita suprapunerea */
+  width: 1000px;
+  height: 700px;
+  margin: 20px auto;        /* centrare orizontală + spațiu sus/jos */
+  background: var(--bg-wrapper);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  display: flex;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: wrapperFadeIn 0.5s var(--transition) forwards;
+}
+
+/* Animație de intrare */
+@keyframes wrapperFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  
-  .chat-sidebar {
-    background: var(--bg-sidebar);
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .search-container {
-    display: flex;
-    gap: .5rem;
-  }
-  
-  .search-input {
-    flex: 1;
-    padding: .5rem;
-    border: none;
-    border-radius: var(--radius);
-    background: var(--border-color);
-    color: var(--text-light);
-  }
-  .search-input::placeholder {
-    color: var(--text-muted);
-  }
-  
-  .search-button {
-    background: var(--accent);
-    border: none;
-    padding: 0 1rem;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: background .3s;
-  }
-  .search-button:hover {
-    background: #00b890;
-  }
-  
-  .convo-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
-  }
-  .convo-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: .75rem;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: background .2s;
-    margin-bottom: .25rem;
-  }
-  .convo-list li:hover,
-  .convo-list li.active {
-    background: var(--border-color);
-  }
-  .convo-email {
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .convo-preview {
-    font-size: .85rem;
-    color: var(--text-muted);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 120px;
-  }
-  
-  .chat-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .chat-header {
-    padding: 1rem;
-    background: var(--bg-header);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .chat-header h3 {
-    margin: 0;
-    color: var(--text-light);
-  }
-  
-  .chat-messages {
-    flex: 1;
-    padding: 1rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: .75rem;
-  }
-  
-  .message {
-    max-width: 70%;
-    padding: .75rem 1rem;
-    position: relative;
-    word-wrap: break-word;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
-  .sent {
-    align-self: flex-end;
-    background: var(--accent);
-    border-radius: 16px 16px 4px 16px;
-  }
-  .sent::after {
-    content: '';
-    position: absolute;
-    right: -8px; bottom: 4px;
-    border: 8px solid transparent;
-    border-left-color: var(--accent);
-  }
-  .received {
-    align-self: flex-start;
-    background: #1e272e;
-    border-radius: 16px 16px 16px 4px;
-  }
-  .received::before {
-    content: '';
-    position: absolute;
-    left: -8px; bottom: 4px;
-    border: 8px solid transparent;
-    border-right-color: #1e272e;
-  }
-  .message p {
-    margin: 0 0 .25rem;
-    line-height: 1.4;
-  }
-  .message small {
-    font-size: .75rem;
-    color: var(--text-muted);
-    position: absolute;
-    bottom: 4px;
-    right: 8px;
-  }
-  
-  .chat-input {
-    display: flex;
-    padding: .75rem;
-    background: var(--bg-header);
-    border-top: 1px solid var(--border-color);
-    position: sticky;
-    bottom: 0;
-    gap: .5rem;
-  }
-  .chat-input-field {
-    flex: 1;
-    padding: .75rem 1rem;
-    border: none;
-    border-radius: 24px;
-    background: var(--border-color);
-    color: var(--text-light);
-  }
-  .chat-input-field::placeholder {
-    color: var(--text-muted);
-  }
-  .chat-send-button {
-    width: 44px;
-    height: 44px;
-    background: var(--accent);
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    cursor: pointer;
-    transition: background .3s;
-  }
-  .chat-send-button:hover {
-    background: #00b890;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .chat-wrapper {
-      grid-template-columns: 60px 1fr;
-    }
-    .search-container,
-    .convo-email,
-    .convo-preview {
-      display: none;
-    }
-    .chat-send-button {
-      width: 36px;
-      height: 36px;
-      font-size: 1rem;
-    }
-    .chat-input-field {
-      border-radius: 18px;
-    }
-  }
-  
+}
+
+/* ===== Sidebar conversații ===== */
+.chat-sidebar {
+  /* Lățime fixă, nu cedează spațiu */
+  flex: 0 0 280px;
+  min-width: 280px;
+  background: var(--bg-sidebar);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset -2px 0 6px rgba(0,0,0,0.3);
+}
+
+/* Scrollbar custom */
+.chat-sidebar,
+.chat-messages {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+.chat-sidebar::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-sidebar::-webkit-scrollbar-thumb,
+.chat-messages::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+.chat-sidebar::-webkit-scrollbar-track,
+.chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Căsuța de căutare */
+.search-container {
+  display: flex;
+  margin-bottom: 20px;
+}
+.search-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--accent);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  background: var(--bg-chat);
+  color: var(--color-text);
+  transition: border var(--transition), background var(--transition);
+}
+.search-input:focus {
+  background: var(--accent-light);
+  outline: none;
+}
+.search-input::placeholder {
+  color: var(--color-muted);
+}
+.search-button {
+  width: 44px;
+  border: 1px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.15s ease-in-out;
+}
+.search-button:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+}
+
+/* Lista de conversații */
+.convo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+.convo-list li {
+  background: var(--bg-chat);
+  margin-bottom: 12px;
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition), transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  animation: itemFadeIn 0.4s ease forwards;
+  opacity: 0;
+}
+.convo-list li:nth-child(1) { animation-delay: 0.1s; }
+.convo-list li:nth-child(2) { animation-delay: 0.15s; }
+.convo-list li:nth-child(3) { animation-delay: 0.2s; }
+@keyframes itemFadeIn {
+  to { opacity: 1; }
+}
+.convo-list li:hover {
+  background: var(--accent);
+  transform: translateX(3px);
+}
+.convo-list li.active {
+  background: var(--accent);
+}
+.convo-email {
+  font-weight: bold;
+  font-size: 1em;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.convo-preview {
+  font-size: 0.85em;
+  color: #ddd;
+  margin-top: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== Zona de chat ===== */
+.chat-content {
+  /* Preia restul spațiului din wrapper */
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-wrapper);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Header conversație */
+.chat-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid #415a77;
+  background: rgba(0,0,0,0.1);
+  transition: background var(--transition);
+}
+.chat-header:hover {
+  background: rgba(0,0,0,0.2);
+}
+.chat-header h3 {
+  margin: 0;
+  font-size: 1.3em;
+  color: var(--accent-light);
+}
+
+/* Mesaje: container flex-column */
+.chat-messages {
+  /* Înălțime adaptată la wrapper minus header & input */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  overflow-y: auto;
+  background: var(--bg-chat);
+}
+
+/* Bule mesaje */
+.message {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 18px;
+  margin: 8px 0;
+  border-radius: 20px;
+  max-width: 65%;
+  width: fit-content;
+  line-height: 1.4;
+  position: relative;
+  opacity: 0;
+  animation: bubbleFadeIn 0.4s ease forwards;
+}
+@keyframes bubbleFadeIn {
+  to { opacity: 1; }
+}
+
+/* Mesaje primite (stânga) */
+.message.received {
+  align-self: flex-start;
+  background: #415a77;
+  border-bottom-left-radius: 4px;
+}
+
+/* Mesaje trimise (dreapta) */
+.message.sent {
+  align-self: flex-end;
+  background: var(--accent);
+  border-bottom-right-radius: 4px;
+}
+
+/* Text și dată */
+.message p {
+  margin: 0 0 4px;
+  color: #fff;
+  word-break: break-word;
+}
+.message small {
+  align-self: flex-end;
+  font-size: 0.7em;
+  color: var(--color-muted);
+}
+
+/* ===== Input de jos ===== */
+.chat-input {
+  display: flex;
+  padding: 16px 24px;
+  background: var(--bg-page);
+  border-top: 1px solid #415a77;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+.chat-input-field {
+  flex: 1;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 30px;
+  background: var(--bg-chat);
+  color: #fff;
+  font-size: 1em;
+  transition: background var(--transition), box-shadow var(--transition);
+}
+.chat-input-field:focus {
+  background: var(--accent-light);
+  box-shadow: 0 0 8px rgba(41,136,173,0.7);
+  outline: none;
+}
+.chat-send-button {
+  margin-left: 14px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.3em;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.2s;
+}
+.chat-send-button:hover {
+  background: var(--accent-dark);
+  transform: scale(1.1);
+}

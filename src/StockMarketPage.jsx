@@ -38,7 +38,7 @@ ChartJS.register(
 
 import logo from "./assets/investAI.png";
 import "./styling/StockMarketPage.css";
-
+ const AV_KEY = import.meta.env.VITE_ALPHA_VANTAGE_KEY;
 const StockMarketPage = () => {
   const [stockSymbol, setStockSymbol] = useState("AAPL");
   const [stockData, setStockData] = useState([]);
@@ -55,7 +55,7 @@ const StockMarketPage = () => {
   const [loadingRisk, setLoadingRisk] = useState(false);
   const [explanationOpen, setExplanationOpen] = useState(false);
   const navigate = useNavigate();
-
+ 
 
   const handleSignOut = async () => {
     try {
@@ -98,7 +98,7 @@ const StockMarketPage = () => {
     try {
       console.log("Fetching stock data for:", symbol);
       const response = await axios.get(
-        `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=PCWGE28SU6R1UMOT`
+        `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${AV_KEY}`
       );
       
 
