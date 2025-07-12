@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "./authService";
 
 const Home = () => {
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState("");  // stores user email
   const location = useLocation();
   const navigate = useNavigate();
   const handleSignOut = async () => {
@@ -36,7 +36,7 @@ const Home = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            entry.target.classList.add("visible");  // reveal on scroll
           }
         });
       },
@@ -46,9 +46,9 @@ const Home = () => {
     heroSections.forEach((section) => observer.observe(section));
 
     return () => {
-      heroSections.forEach((section) => observer.unobserve(section));
+      heroSections.forEach((section) => observer.unobserve(section));  // cleanup observer
     };
-  }, []);
+  }, []); // animate hero sections
 
   return (
     <div className="home-container">
@@ -90,7 +90,7 @@ const Home = () => {
       
       <section
         className="hero-section"
-        style={{ backgroundImage: `url(${stocksBanner})` }}
+        style={{ backgroundImage: `url(${stocksBanner})` }}  // stock hero banner
       >
         <div className="hero-content">
           <h1>Stock Market Predictions</h1>
@@ -104,7 +104,7 @@ const Home = () => {
 
       <section
         className="hero-section"
-        style={{ backgroundImage: `url(${cryptoBanner})` }}
+        style={{ backgroundImage: `url(${cryptoBanner})` }}  // crypto hero banner
       >
         <div className="hero-content">
           <h1>Cryptocurrency Insights</h1>

@@ -20,13 +20,13 @@ export const signup = async (email, password) => {
       auth,
       email,
       password
-    );
-    const user = userCredential.user;
+    ); // register user
+    const user = userCredential.user; // grab user 
 
    
     await setDoc(doc(db, "users", user.uid), {
       email: user.email,
-    });
+    }); // save user in the users collection
 
     return user;
   } catch (error) {
@@ -58,13 +58,13 @@ export const googleSignIn = async () => {
       doc(db, "users", user.uid),
       { email: user.email },
       { merge: true }
-    );
+    );  // merge user record
 
     return user;
   } catch (error) {
     throw error;
   }
-};
+};  
 
 export const logout = async () => {
   try {

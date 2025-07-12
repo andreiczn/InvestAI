@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
+import axios from "axios";  // http client
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -40,47 +40,47 @@ import logo from "./assets/investAI.png";
 import "./styling/StockMarketPage.css";
  const AV_KEY = import.meta.env.VITE_ALPHA_VANTAGE_KEY;
 const StockMarketPage = () => {
-  const [stockSymbol, setStockSymbol] = useState("AAPL");
-  const [stockData, setStockData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [userEmail, setUserEmail] = useState("");
-  const location = useLocation();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [chartKey, setChartKey] = useState(0);
-  const [prediction, setPrediction] = useState(null);
-  const [loadingPrediction, setLoadingPrediction] = useState(false);
-  const [showPrediction, setShowPrediction] = useState(false); 
-  const [stockNews, setStockNews] = useState([]);
-  const [riskData, setRiskData] = useState(null);
-  const [loadingRisk, setLoadingRisk] = useState(false);
-  const [explanationOpen, setExplanationOpen] = useState(false);
-  const navigate = useNavigate();
+  const [stockSymbol, setStockSymbol] = useState("AAPL"); // selected stock
+  const [stockData, setStockData] = useState([]); // price data
+  const [loading, setLoading] = useState(true); // loading state
+  const [userEmail, setUserEmail] = useState(""); // user email
+  const location = useLocation(); // current route
+  const [errorMessage, setErrorMessage] = useState(""); // error text
+  const [chartKey, setChartKey] = useState(0); // force chart reload
+  const [prediction, setPrediction] = useState(null); // ai predictions
+  const [loadingPrediction, setLoadingPrediction] = useState(false); // pred loading
+  const [showPrediction, setShowPrediction] = useState(false); // show pred
+  const [stockNews, setStockNews] = useState([]); // news articles
+  const [riskData, setRiskData] = useState(null); // risk result
+  const [loadingRisk, setLoadingRisk] = useState(false); // risk loading
+  const [explanationOpen, setExplanationOpen] = useState(false); // exp toggle
+  const navigate = useNavigate(); // nav hook
  
 
   const handleSignOut = async () => {
     try {
       await logout();                        
-      navigate("/auth", { replace: true }); 
+      navigate("/auth", { replace: true });  // redirect
     } catch (err) {
-      console.error("Logout error:", err);
+      console.error("Logout error:", err);  
     }
   };
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
-      setUserEmail(user.email);
+      setUserEmail(user.email);   // set email on mount
     }
   }, []);
   useEffect(() => {
     const fetchSentimentAndRisk = async () => {
-      setLoadingRisk(true);
-      const news = await getStockNews(stockSymbol);
-      const sentiment = await analyzeNewsSentiment(news);
+      setLoadingRisk(true);  // start risk load
+      const news = await getStockNews(stockSymbol);  // fetch news
+      const sentiment = await analyzeNewsSentiment(news);  // get sentiment
   
       console.log("Sentiment analysis result:", sentiment);
   
-      const risk = await getRiskScore(stockSymbol, sentiment.average_sentiment, 30);
+      const risk = await getRiskScore(stockSymbol, sentiment.average_sentiment, 30);  // calc risk
       console.log("Risk Score Result:", risk);
   
       setRiskData(risk);
@@ -99,11 +99,11 @@ const StockMarketPage = () => {
       console.log("Fetching stock data for:", symbol);
       const response = await axios.get(
         `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${AV_KEY}`
-      );
+      );  // fetch stock data
       
 
       if (response.data["Note"]) {
-        setErrorMessage("API limit reached. Try again tomorrow or use a different API key.");
+        setErrorMessage("API limit reached. Try again tomorrow or use a different API key."); // limit msg (25 reqs)
         setLoading(false);
         return;
       }
@@ -117,7 +117,7 @@ const StockMarketPage = () => {
 
       const formattedData = Object.entries(data)
         .slice(0, 60)
-        .map(([date, values]) => ({
+        .map(([date, values]) => ({  // format for candlestick
           x: new Date(date),
           o: parseFloat(values["1. open"]),
           h: parseFloat(values["2. high"]),
@@ -136,7 +136,7 @@ const StockMarketPage = () => {
   };
 
   const fetchPrediction = async () => {
-    setLoadingPrediction(true);
+    setLoadingPrediction(true); // start pred
     setShowPrediction(false); 
 
     try {
@@ -145,7 +145,7 @@ const StockMarketPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ticker: stockSymbol }),
+        body: JSON.stringify({ ticker: stockSymbol }),  // send symbol
       });
 
       if (!response.ok) {
@@ -166,7 +166,7 @@ const StockMarketPage = () => {
   useEffect(() => {
     fetchStockData(stockSymbol);
     getStockNews(stockSymbol).then(setStockNews);
-  }, [stockSymbol]);
+  }, [stockSymbol]);  // on symbol change
 
   const chartOptions = {
     responsive: true,
@@ -382,10 +382,10 @@ const StockMarketPage = () => {
               <li key={article.uuid} className="news-item">
                 <a href={article.url} target="_blank" rel="noreferrer">
                   <strong>{article.title}</strong>
-                </a>
+                </a>  {/* article link */}
                 <p className="news-meta">
                   {article.source} – {new Date(article.published_at).toLocaleString()}
-                </p>
+                </p> {/* meta */}
               </li>
             ))}
           </ul>

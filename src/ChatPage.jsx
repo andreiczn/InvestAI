@@ -36,7 +36,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const u = auth.currentUser;
-    if (u) setUserEmail(u.email);
+    if (u) setUserEmail(u.email); // set email on load
   }, [auth]);
 
   return (
@@ -83,7 +83,7 @@ const Navbar = () => {
 const ChatPage = () => {
   const auth = getAuth();
   const [userUID, setUserUID] = useState(null);
-  const [conversations, setConversations] = useState([]);
+  const [conversations, setConversations] = useState([]);  // store convos
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [usersEmails, setUsersEmails] = useState({});
@@ -151,12 +151,12 @@ const ChatPage = () => {
   }, [userUID]);
 
   const selectChat = (uid) => {
-    setCurrentChat(uid);
+    setCurrentChat(uid); // set active chat
     const convo = conversations.find((c) => c.uid === uid) || { messages: [] };
     const sorted = [...convo.messages].sort(
       (a, b) => a.timestamp.seconds - b.timestamp.seconds
     );
-    setMessages(sorted);
+    setMessages(sorted);  // sort messages
   };
 
   const handleSend = async () => {
@@ -165,11 +165,11 @@ const ChatPage = () => {
       message: newMessage.trim(),
       senderId: userUID,
       recieverId: currentChat,
-      timestamp: serverTimestamp(),
+      timestamp: serverTimestamp(), // mark time
     };
-    await addDoc(collection(db, "messages"), msgData);
+    await addDoc(collection(db, "messages"), msgData);  // save message
     setMessages((prev) => [...prev, msgData]);
-    setNewMessage("");
+    setNewMessage("");  // clear input
   };
 
   const handleSearch = async () => {
@@ -178,14 +178,14 @@ const ChatPage = () => {
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("email", "==", email));
     const snap = await getDocs(q);
-    if (snap.empty) return alert("User not found");
+    if (snap.empty) return alert("User not found");  // notify if none
     const uid = snap.docs[0].id;
     if (!conversations.find((c) => c.uid === uid)) {
       setConversations((prev) => [...prev, { uid, email, messages: [] }]);
     }
-    selectChat(uid);
+    selectChat(uid); // open new chat
   };
-
+  {/* sidebar and chat layout */}
   return (
     <div className="chat-page">
       <Navbar />

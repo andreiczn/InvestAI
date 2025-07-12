@@ -12,6 +12,7 @@ const Auth = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); 
 
+  // function to perform the login/signup + redirect home
   const handleAuth = async () => {
     try {
       if (isLogin) {
@@ -25,6 +26,7 @@ const Auth = () => {
     }
   };
 
+  // function to handle google sign in
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();

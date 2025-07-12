@@ -67,7 +67,7 @@ const CryptoMarketPage = () => {
         console.error("Logout error:", err);
       }
     };
-
+  // fetch price data
   const fetchCryptoData = async (symbol) => {
     setLoading(true);
     setErrorMessage("");
@@ -81,6 +81,7 @@ const CryptoMarketPage = () => {
         setLoading(false);
         return;
       }
+      // format for candlestick
       const formatted = prices.map(([ts, price], i, arr) => {
         const open = i === 0 ? price : arr[i - 1][1];
         const close = price;
@@ -89,7 +90,7 @@ const CryptoMarketPage = () => {
         return { x: new Date(ts), o: open, h: high, l: low, c: close };
       });
       setCryptoData(formatted);
-      setChartKey(k => k + 1);
+      setChartKey(k => k + 1);  // refresh chart
     } catch (e) {
       console.error(e);
       setErrorMessage("Failed to fetch crypto data. Please try again later.");
@@ -142,7 +143,7 @@ const CryptoMarketPage = () => {
       y: { beginAtZero: false }
     },
   };
-
+  // prepare prediction line data
   const predictionChartData = prediction && {
     labels: prediction.map((_, i) => { const d = new Date(); d.setDate(d.getDate() + i + 1); return d; }),
     datasets: [{
